@@ -75,26 +75,33 @@ def generate_data_dict(date, scope, paragraph):
     problems = []
 
     # ID
-    rngs = []
-    nums = re.split(r"\s~\s", scope[1:-1])
-    rng = int(nums[1]) - int(nums[0]) + 1
-    start = int(nums[0])
+    q_nums = []
+    t_b = re.split(r"\s~\s", scope[1:-1])
+    rng = int(t_b[-1]) - int(t_b[0]) + 1
     for i in range(rng):
-        rngs.append(start + i)
-    for rng in rngs:
-        if rn
-    # for i in range(rng):
-    #     if  < 10:
-    #         rngs.append("0" + str(start + i))
-    # data_dict["id"] = date[:-4] + "_" + nums[0] + "-" + nums[-1]
+        num = int(t_b[0]) + i
+        q_num = "0" + str(num) if num < 10 else str(num)
+        q_nums.append(q_num)
+    data_dict["id"] = date[:-4] + "_" + q_nums[0] + "-" + q_nums[-1]
 
     # Cleansing
     clean_paragraph = re.sub(
-        r"\n\d{4}학년도.*(\n.*){9}\n|\n.*\n국어영.*(\n.*){3}\n", "", paragraph
+        r"\.\n\d{4}학년도.*(\n.*){9}\n|"
+        r"\n\<그림\>.*\n.*\n국어영.*(\n.*){3}|"
+        r"\.\n.*\n국어영.*(\n.*){3}\n",
+        # r"\.\n.*\n.*\n국어.*\n.*\n.*\n.*|"
+        # r"\.\n.*\n국어영.*(\n.*){3}\n|"
+        # r"\.(\n.*){2}\n국어영.*(\n.*){3}\n"
+        # r"\.\n.*\n국어영.*(\n.*){3}\n",
+        # r"\s\n.*\n국어영.*(\n.*){3}|"
+        "",
+        paragraph,
     )
+    # .\n 4\n국어영역\n고3\n4\n20\n
+    # .\n[A]\n 고3\n국어영역\n5\n5\n20\n
 
     # Split into paragraph & question
-    subpgphs = re.split(r"\n\d+\.\s*", clean_paragraph)
+    subpgphs = re.split(r"\.\s+\d+\.\s*", clean_paragraph)
 
     # Paragraph : New line
     pgph = re.sub(r"\n", "", subpgphs[0])
@@ -132,7 +139,7 @@ def generate_data_dict(date, scope, paragraph):
 
     if pgph[0] == "\n":
         pgph = pgph[1:]
-    data_dict["paragraph"] = pgph[:-1]
+    data_dict["paragraph"] = pgph + "."
 
     # Type
     data_dict["type"] = 0
@@ -141,13 +148,80 @@ def generate_data_dict(date, scope, paragraph):
     data_dict["paragraph_subject"] = "TODO"
 
     # Problems
-    print(subpgphs[1:])
-    print(rngs)
+    for i in range(len(subpgphs[1:])):
+        # for i in range():
+        # For each problem :
+        problem = dict()
 
-    # for i in range(1):
-    # # for i in range(subpgphs[1:]):
-    #     problem = dict()
-    #     problem["question_id"] = date[:-4]
+        # Question ID
+        problem["question_id"] = date[:-4] + "_" + q_nums[i]
+
+        # Problems : New line
+        question = re.sub(r"\n", "", subpgphs[i + 1])
+
+        # Question
+        question = re.split(r"\?", question)
+        problem["question"] = question[0] + "?"
+        question = re.split(r"<\s보\s기\s>", question[1])
+
+        # Example & Choices
+        choices = []
+        choice = re.split(r"[①②③④⑤]", question[-1])
+        if len(choice[0]) > 1:
+            # Example : Comma
+            example = re.sub(r"\,", ", ", choice[0])
+            example = re.sub(r"\,\s+", ", ", example)
+
+            # Example : Punctuation
+            example = re.sub(r"\.", ". ", example)
+            example = re.sub(r"\.\s+", ". ", example)
+            example = re.sub(r"\. \)", ".) ", example)
+
+            # Example : Question mark
+            example = re.sub(r"\?\s+", "? ", example)
+            example = re.sub(r"\?", "? ", example)
+
+            # Example : Dash
+            example = re.sub(r"\-", " -", example)
+            example = re.sub(r"\s+\-", " -", example)
+
+            # Example : Double quotes
+            example = re.sub(r"\s*\“", " “", example)
+            example = re.sub(r"\s*\”", "” ", example)
+
+            # Example : Asterisk
+            example = re.sub(r"\-\*", "- *", example)
+            example = re.sub(r"\*\s+", "*", example)
+
+            if "<보기>" in problem["question"]:
+                problem["question_plus"] = "< 보 기 >\n" + example[:-1]
+            else:
+                problem["question_plus"] = example[:-1]
+
+        for i in range(len(choice)):
+            if i == 0:
+                continue
+            if i == 5:
+                choices.append(choice[i] + ".")
+            else:
+                choices.append(choice[i])
+        problem["choices"] = choices
+
+        # Answer
+        problem["answer"] = 0
+
+        # Score
+        if "[3점]" in question[0]:
+            problem["score"] = 3
+        else:
+            problem["score"] = 2
+
+        # Question type
+        problem["question_type"] = "TODO"
+
+        problems.append(problem)
+
+    data_dict["problems"] = problems
 
     return data_dict
 
@@ -193,16 +267,16 @@ def main():
     paragraphs = []
     for i in range(len(raw_texts)):
         paragraphs, scopes = split_by_pgph(raw_texts[i])
-        for j in range(1):
-            # for j in range(len(scopes)):
+        for j in range(len(scopes)):
+            # for j in range(1):
             data_dict = generate_data_dict(pdfs[i], scopes[j], paragraphs[j])
             data_dicts.append(data_dict)
 
         json_path = "../json/" + pdfs[i][:-4] + ".json"
         with open(json_path, "w", encoding="utf-8") as json_file:
             json.dump(data_dicts, json_file, ensure_ascii=False, indent=4)
-        with open("raw text", "w", encoding="utf-8") as json_file:
-            json.dump(raw_texts[0], json_file, ensure_ascii=False, indent=4)
+        # with open("raw text", "w", encoding="utf-8") as json_file:
+        #     json.dump(raw_texts[0], json_file, ensure_ascii=False, indent=4)
 
 
 # Run if script is called
