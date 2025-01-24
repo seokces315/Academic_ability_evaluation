@@ -86,22 +86,30 @@ def generate_data_dict(date, scope, paragraph):
 
     # Cleansing
     clean_paragraph = re.sub(
-        r"\.\n\d{4}학년도.*(\n.*){9}\n|"
-        r"\n\<그림\>.*\n.*\n국어영.*(\n.*){3}|"
-        r"\.\n.*\n국어영.*(\n.*){3}\n",
-        # r"\.\n.*\n.*\n국어.*\n.*\n.*\n.*|"
-        # r"\.\n.*\n국어영.*(\n.*){3}\n|"
-        # r"\.(\n.*){2}\n국어영.*(\n.*){3}\n"
-        # r"\.\n.*\n국어영.*(\n.*){3}\n",
-        # r"\s\n.*\n국어영.*(\n.*){3}|"
+        r"\n.*학력평가.*\n국어영역(\n.*){8}\n|"
+        r"\n.*학력평가.*\n.*\(화법과작문\)(\n.*){7}\n",
         "",
         paragraph,
     )
-    # .\n 4\n국어영역\n고3\n4\n20\n
-    # .\n[A]\n 고3\n국어영역\n5\n5\n20\n
+
+    clean_paragraph = re.sub(
+        r"\n<그림>.*\n.*고3\n국어영역(\n.*){3}|"
+        r"\n\[A\](\n.*)*\n.*고3\n국어영역.*(\n.*){3}",
+        "",
+        clean_paragraph,
+    )
+
+    clean_paragraph = re.sub(
+        r"\n.*고3\n국어영역(\n.*){3}|"
+        r"\n.*\n국어영역.*\n고3(\n.*){2}|"
+        r"\n\[A\]\n.*고3\n국어영역.*(\n.*){3}|"
+        r"(\n.*){3}\n.*이어서.*선택과목.*(\n.*)*\n",
+        "",
+        clean_paragraph,
+    )
 
     # Split into paragraph & question
-    subpgphs = re.split(r"\.\s+\d+\.\s*", clean_paragraph)
+    subpgphs = re.split(r"\.\s*\n\d+\.\s*|\-\s*\n\d+\.\s*", clean_paragraph)
 
     # Paragraph : New line
     pgph = re.sub(r"\n", "", subpgphs[0])
@@ -140,6 +148,8 @@ def generate_data_dict(date, scope, paragraph):
     if pgph[0] == "\n":
         pgph = pgph[1:]
     data_dict["paragraph"] = pgph + "."
+    if data_dict["paragraph"][-3] == "｣":
+        data_dict["paragraph"] = data_dict["paragraph"][:-1] + "-"
 
     # Type
     data_dict["type"] = 0
@@ -161,7 +171,9 @@ def generate_data_dict(date, scope, paragraph):
 
         # Question
         question = re.split(r"\?", question)
-        problem["question"] = question[0] + "?"
+        query = re.sub(r"～", "~", question[0])
+        query = re.sub(r"~ ", "~", query)
+        problem["question"] = query + "?"
         question = re.split(r"<\s보\s기\s>", question[1])
 
         # Example & Choices
@@ -193,15 +205,24 @@ def generate_data_dict(date, scope, paragraph):
             example = re.sub(r"\-\*", "- *", example)
             example = re.sub(r"\*\s+", "*", example)
 
-            if "<보기>" in problem["question"]:
-                problem["question_plus"] = "< 보 기 >\n" + example[:-1]
-            else:
-                problem["question_plus"] = example[:-1]
+            # Example : Series of dot
+            example = re.sub(r"\·\s([ⓐⓑⓒⓓ㉠㉡㉢㉣㉤])", r"· \1\n", example)
 
+            example = example.rstrip()
+            print(example)
+
+            if "<보기>" in problem["question"]:
+                problem["question_plus"] = "< 보 기 >\n" + example
+            else:
+                if "[3점]" in example:
+                    problem["question_plus"] = example[5:]
+                else:
+                    problem["question_plus"] = example
+
+        choice = choice[1:]
         for i in range(len(choice)):
-            if i == 0:
-                continue
-            if i == 5:
+            choice[i] = choice[i].strip()
+            if choice[i][-1] != ".":
                 choices.append(choice[i] + ".")
             else:
                 choices.append(choice[i])
@@ -211,6 +232,7 @@ def generate_data_dict(date, scope, paragraph):
         problem["answer"] = 0
 
         # Score
+        print(question[0])
         if "[3점]" in question[0]:
             problem["score"] = 3
         else:
