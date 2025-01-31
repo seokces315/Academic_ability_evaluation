@@ -12,7 +12,7 @@ def extract_pdf(paths):
     images = []
 
     # Open pdf file with given paths
-    for path in paths[:1]:
+    for path in paths:
 
         # For each pdf file :
         text = []
@@ -159,7 +159,6 @@ def generate_data_dict(date, scope, paragraph):
 
     # Problems
     for i in range(len(subpgphs[1:])):
-        # for i in range():
         # For each problem :
         problem = dict()
 
@@ -174,7 +173,10 @@ def generate_data_dict(date, scope, paragraph):
         query = re.sub(r"～", "~", question[0])
         query = re.sub(r"~ ", "~", query)
         problem["question"] = query + "?"
-        question = re.split(r"<\s보\s기\s>", question[1])
+        try:
+            question = re.split(r"<\s보\s기\s>", question[1])
+        except:
+            pass
 
         # Example & Choices
         choices = []
@@ -209,7 +211,6 @@ def generate_data_dict(date, scope, paragraph):
             example = re.sub(r"\·\s([ⓐⓑⓒⓓ㉠㉡㉢㉣㉤])", r"· \1\n", example)
 
             example = example.rstrip()
-            print(example)
 
             if "<보기>" in problem["question"]:
                 problem["question_plus"] = "< 보 기 >\n" + example
@@ -222,9 +223,12 @@ def generate_data_dict(date, scope, paragraph):
         choice = choice[1:]
         for i in range(len(choice)):
             choice[i] = choice[i].strip()
-            if choice[i][-1] != ".":
-                choices.append(choice[i] + ".")
-            else:
+            try:
+                if choice[i][-1] != ".":
+                    choices.append(choice[i] + ".")
+                else:
+                    choices.append(choice[i])
+            except:
                 choices.append(choice[i])
         problem["choices"] = choices
 
@@ -232,7 +236,6 @@ def generate_data_dict(date, scope, paragraph):
         problem["answer"] = 0
 
         # Score
-        print(question[0])
         if "[3점]" in question[0]:
             problem["score"] = 3
         else:
@@ -287,14 +290,15 @@ def main():
 
     # Prototype : Corpus
     paragraphs = []
-    for i in range(len(raw_texts)):
-        paragraphs, scopes = split_by_pgph(raw_texts[i])
+    idx_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    for idx in idx_list:
+        paragraphs, scopes = split_by_pgph(raw_texts[idx])
+
         for j in range(len(scopes)):
-            # for j in range(1):
-            data_dict = generate_data_dict(pdfs[i], scopes[j], paragraphs[j])
+            data_dict = generate_data_dict(pdfs[idx], scopes[j], paragraphs[j])
             data_dicts.append(data_dict)
 
-        json_path = "../json/" + pdfs[i][:-4] + ".json"
+        json_path = "../json/" + pdfs[idx][:-4] + ".json"
         with open(json_path, "w", encoding="utf-8") as json_file:
             json.dump(data_dicts, json_file, ensure_ascii=False, indent=4)
         # with open("raw text", "w", encoding="utf-8") as json_file:
