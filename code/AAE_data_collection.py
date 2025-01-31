@@ -290,9 +290,12 @@ def main():
 
     # Prototype : Corpus
     paragraphs = []
-    idx_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    idx_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     for idx in idx_list:
         paragraphs, scopes = split_by_pgph(raw_texts[idx])
+
+        # with open("raw text", "w", encoding="utf-8") as json_file:
+        #     json.dump(raw_texts[1], json_file, ensure_ascii=False, indent=4)
 
         for j in range(len(scopes)):
             data_dict = generate_data_dict(pdfs[idx], scopes[j], paragraphs[j])
@@ -301,8 +304,6 @@ def main():
         json_path = "../json/" + pdfs[idx][:-4] + ".json"
         with open(json_path, "w", encoding="utf-8") as json_file:
             json.dump(data_dicts, json_file, ensure_ascii=False, indent=4)
-        # with open("raw text", "w", encoding="utf-8") as json_file:
-        #     json.dump(raw_texts[0], json_file, ensure_ascii=False, indent=4)
 
 
 # Run if script is called
