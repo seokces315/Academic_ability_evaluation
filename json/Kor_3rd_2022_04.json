@@ -69,7 +69,7 @@
                 ],
                 "answer": 4,
                 "score": 2,
-                "question_type": "내용 전개 방식 파악"
+                "question_type": "글의 구조와 전개 방식 파악"
             },
             {
                 "question_id": "Kor_3rd_2022_04_05",
@@ -113,7 +113,7 @@
                 ],
                 "answer": 5,
                 "score": 2,
-                "question_type": "문맥적 의미 파악"
+                "question_type": "생략된 내용 추론"
             },
             {
                 "question_id": "Kor_3rd_2022_04_08",
@@ -177,7 +177,7 @@
                 ],
                 "answer": 4,
                 "score": 2,
-                "question_type": "문맥적 의미 파악"
+                "question_type": "중심 내용 파악"
             },
             {
                 "question_id": "Kor_3rd_2022_04_12",
@@ -323,7 +323,7 @@
                 ],
                 "answer": 5,
                 "score": 2,
-                "question_type": "시어의 의미 파악"
+                "question_type": "시어, 시구의 의미 파악"
             },
             {
                 "question_id": "Kor_3rd_2022_04_21",
@@ -374,7 +374,7 @@
                 ],
                 "answer": 5,
                 "score": 2,
-                "question_type": "작품 간 공통점 파악"
+                "question_type": "작품 간의 공통점 파악"
             },
             {
                 "question_id": "Kor_3rd_2022_04_24",
@@ -440,7 +440,7 @@
                 ],
                 "answer": 1,
                 "score": 2,
-                "question_type": "서술상 특징 파악"
+                "question_type": "서술상의 특징 파악"
             },
             {
                 "question_id": "Kor_3rd_2022_04_28",
@@ -468,7 +468,7 @@
                 ],
                 "answer": 3,
                 "score": 2,
-                "question_type": "구절의 의미 파악"
+                "question_type": "소재의 기능 파악"
             },
             {
                 "question_id": "Kor_3rd_2022_04_30",
@@ -505,7 +505,7 @@
                 ],
                 "answer": 3,
                 "score": 2,
-                "question_type": "서술상 특징 파악"
+                "question_type": "서술상의 특징 파악"
             },
             {
                 "question_id": "Kor_3rd_2022_04_32",
@@ -533,7 +533,7 @@
                 ],
                 "answer": 5,
                 "score": 2,
-                "question_type": "인물의 말하기 방식 파악"
+                "question_type": "인물의 심리, 태도 파악"
             },
             {
                 "question_id": "Kor_3rd_2022_04_34",
@@ -569,7 +569,7 @@
                 ],
                 "answer": 4,
                 "score": 2,
-                "question_type": "말하기 방식 파악"
+                "question_type": "말하기 방식 파악하기"
             },
             {
                 "question_id": "Kor_3rd_2022_04_36",
@@ -584,7 +584,7 @@
                 ],
                 "answer": 5,
                 "score": 2,
-                "question_type": "발표 전략 파악"
+                "question_type": "발표 표현 전략 사용하기"
             },
             {
                 "question_id": "Kor_3rd_2022_04_37",

@@ -306,7 +306,7 @@
                 ],
                 "answer": 2,
                 "score": 2,
-                "question_type": "인물에 대해 파악"
+                "question_type": "인물의 성격, 유형 이해"
             },
             {
                 "question_id": "Kor_3rd_2022_03_20",
@@ -371,7 +371,7 @@
                 ],
                 "answer": 5,
                 "score": 2,
-                "question_type": "시구 및 구절의 의미 파악"
+                "question_type": "시구, 구절의 의미 이해"
             },
             {
                 "question_id": "Kor_3rd_2022_03_24",
@@ -385,7 +385,7 @@
                 ],
                 "answer": 4,
                 "score": 2,
-                "question_type": "화자의 태도 및 정서 파악"
+                "question_type": "구절의 의미 이해"
             },
             {
                 "question_id": "Kor_3rd_2022_03_25",
@@ -451,7 +451,7 @@
                 ],
                 "answer": 1,
                 "score": 2,
-                "question_type": "표현상의 특징 파악"
+                "question_type": "서술상의 특징 파악"
             },
             {
                 "question_id": "Kor_3rd_2022_03_29",
@@ -502,7 +502,7 @@
                 ],
                 "answer": 5,
                 "score": 2,
-                "question_type": "인물에 대해 파악"
+                "question_type": "인물의 성격 이해"
             },
             {
                 "question_id": "Kor_3rd_2022_03_32",
@@ -581,7 +581,7 @@
                 ],
                 "answer": 5,
                 "score": 2,
-                "question_type": "발표 전략 파악하기"
+                "question_type": "발표 표현 전략 사용하기"
             },
             {
                 "question_id": "Kor_3rd_2022_03_37",
@@ -596,7 +596,7 @@
                 ],
                 "answer": 5,
                 "score": 3,
-                "question_type": "듣기 전략 파악하기"
+                "question_type": "발표 내용 이해, 평가하기"
             }
         ]
     },
@@ -710,7 +710,7 @@
                 ],
                 "answer": 1,
                 "score": 2,
-                "question_type": "정보 전달 글쓰기 내용 조정하기"
+                "question_type": "정보 전달 글쓰기 내용 점검, 조정하기"
             },
             {
                 "question_id": "Kor_3rd_2022_03_45",
