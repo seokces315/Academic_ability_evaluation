@@ -56,12 +56,12 @@ def split_by_pgph(corpus):
     scopes = []
 
     # Find paragraphs' scope
-    # scopes = re.findall(r"\[\d+\s~\s\d+\]", corpus)
-    scopes = re.findall(r"\[\d+~\d+\]", corpus)
+    scopes = re.findall(r"\[\d+\s~\s\d+\]", corpus)
+    # scopes = re.findall(r"\[\d+~\d+\]", corpus)
 
     # Split total corpus into paragraphs
-    # pgphs = re.split(r"\[\d+\s~\s\d+\]", corpus)
-    pgphs = re.split(r"\[\d+~\d+\]", corpus)
+    pgphs = re.split(r"\[\d+\s~\s\d+\]", corpus)
+    # pgphs = re.split(r"\[\d+~\d+\]", corpus)
     for pgph in pgphs[1:]:
         pgph = re.split(r"답하시오.", pgph)
         paragraphs.append(pgph[1])
@@ -78,8 +78,8 @@ def generate_data_dict(date, scope, paragraph):
 
     # ID
     q_nums = []
-    # t_b = re.split(r"\s~\s", scope[1:-1])
-    t_b = re.split(r"~", scope[1:-1])
+    t_b = re.split(r"\s~\s", scope[1:-1])
+    # t_b = re.split(r"~", scope[1:-1])
     rng = int(t_b[-1]) - int(t_b[0]) + 1
     for i in range(rng):
         num = int(t_b[0]) + i
@@ -284,7 +284,7 @@ def main():
     raw_texts, raw_images = extract_pdf(paths)
 
     # Save images in certain directory
-    idx_list = [2]
+    idx_list = [3]
     for idx in idx_list:
         image_og_path = "../image/" + pdfs[i][:-4] + "_"
         for i, img_pair in enumerate(raw_images[idx]):
@@ -298,7 +298,7 @@ def main():
         paragraphs, scopes = split_by_pgph(raw_texts[idx])
 
         with open("raw text", "w", encoding="utf-8") as json_file:
-            json.dump(raw_texts[2], json_file, ensure_ascii=False, indent=4)
+            json.dump(raw_texts[3], json_file, ensure_ascii=False, indent=4)
 
         for j in range(len(paragraphs)):
             data_dict = generate_data_dict(pdfs[idx], scopes[j], paragraphs[j])
