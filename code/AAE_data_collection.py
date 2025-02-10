@@ -284,9 +284,9 @@ def main():
     raw_texts, raw_images = extract_pdf(paths)
 
     # Save images in certain directory
-    idx_list = [3]
+    idx_list = [4]
     for idx in idx_list:
-        image_og_path = "../image/" + pdfs[i][:-4] + "_"
+        image_og_path = "../image/" + pdfs[idx][:-4] + "_"
         for i, img_pair in enumerate(raw_images[idx]):
             image_path = image_og_path + str(i + 1) + "." + img_pair[1]
             with open(image_path, "wb") as image_file:
