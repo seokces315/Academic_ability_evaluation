@@ -284,7 +284,7 @@ def main():
     raw_texts, raw_images = extract_pdf(paths)
 
     # Save images in certain directory
-    idx_list = [4]
+    idx_list = [5]
     for idx in idx_list:
         image_og_path = "../image/" + pdfs[idx][:-4] + "_"
         for i, img_pair in enumerate(raw_images[idx]):
@@ -298,7 +298,7 @@ def main():
         paragraphs, scopes = split_by_pgph(raw_texts[idx])
 
         with open("raw text", "w", encoding="utf-8") as json_file:
-            json.dump(raw_texts[3], json_file, ensure_ascii=False, indent=4)
+            json.dump(raw_texts[idx], json_file, ensure_ascii=False, indent=4)
 
         for j in range(len(paragraphs)):
             data_dict = generate_data_dict(pdfs[idx], scopes[j], paragraphs[j])
